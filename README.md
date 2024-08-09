@@ -1,5 +1,5 @@
 # VSTRJ-Wrapper
-<#
+
 .SYNOPSIS
   A clean Wrapping script with a few built in functions
 .DESCRIPTION
@@ -31,4 +31,3 @@
   %windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file Invoke-ChangeDefaultLanguage.ps1
 
   Set-StandardVictor.ps1 -Remove
-#>

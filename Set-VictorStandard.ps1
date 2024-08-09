@@ -1,10 +1,20 @@
 <#
 .SYNOPSIS
-  <Overview of script>
+  A clean Wrapping script with a few built in functions
 .DESCRIPTION
-  <Brief description of script>
-.PARAMETER <Parameter_Name>
-    <Brief description of parameter input required. Repeat this attribute if required>
+  A clean Wrapping script with a few built in functions. Such as Write-ScriptLog for log writing, Set-RegKey for writing reg-keys, and Set-DetectionKey to write a detection method.
+  Put your script in the main script region and utilize the built in functions as needed.
+  Detection registry value, $ScriptName with data: $ScriotVersion under HKLM:\Software\$CompanyName
+.PARAMETER ScriptName
+    Returns the name of the script file and sets it as a variable
+.PARAMETER ScriptVersion
+    Sets the version of the script. Will be used in the registry for detection
+.PARAMETER CompanyName
+    Sets the company name that will be used both as folder for the log and the registry key for detection
+.PARAMETER LogFolder
+    Sets the folder will be created. By default a sub folder in C:\Program Data\ with the company name
+.PARAMETER LogFolder
+    Switch parameter to run the script in Remove mode
 .INPUTS
   <Inputs if any, otherwise state None>
 .OUTPUTS
@@ -17,6 +27,7 @@
   
 .EXAMPLE
   powershell.exe -ExecutionPolicy Bypass -file Set-StandardVictor.ps1 
+  %windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file Invoke-ChangeDefaultLanguage.ps1
 
   Set-StandardVictor.ps1 -Remove
 #>
@@ -30,6 +41,14 @@ param(
   [parameter(Mandatory = $false, HelpMessage = "Sets the script version")]
   [ValidateNotNullOrEmpty()]
   [string]$ScriptVersion = "1.0.0",
+
+  [parameter(Mandatory = $false, HelpMessage = "Sets the company name for detection in registry and log folder")]
+  [ValidateNotNullOrEmpty()]
+  [string]$CompanyName = "VSTRJ",
+
+  [parameter(Mandatory = $false, HelpMessage = "Sets the path where the log will be located")]
+  [ValidateNotNullOrEmpty()]
+  [string]$LogFolder = (Join-Path "$($env:ProgramData)" $CompanyName),
 
   [Parameter(ValueFromPipeline)]
   [Switch] $Remove
@@ -81,7 +100,7 @@ function Write-ScriptLog {
 
       [Parameter(Mandatory=$false)]
       [Alias('LogPath')]
-      [string]$Path = "c:\temp\SCRIPTLOG.log"
+      [string]$Path = (Join-path "$LogFolder" "$ScriptName.log")
   )
 
   Begin {
@@ -124,6 +143,7 @@ function Set-RegKey {
         Creates a Registry Key under the specified path with a Registry Value and data. 
         If the Registry Key does not exist, it creates it. If the Remove switch is used,
         it removes the specified Registry Value but not the key.
+        Default detection registry value, $ScriptName with data: $ScriotVersion under HKLM:\Software\$CompanyName
         
     .PARAMETER RegKey
         The registry key that should be created or modified.
@@ -238,7 +258,7 @@ function Set-DetectionKey {
     param(
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [String] $DetectKey = "HKLM:\SOFTWARE\VSTRJ",
+        [String] $DetectKey = "HKLM:\SOFTWARE\$CompanyName",
 
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
@@ -282,9 +302,12 @@ function Set-DetectionKey {
 #region Main Script
 
 if (-not $Remove){
-    Write-ScriptLog -Message "Starting Running $ScriptName" -Level Information
+    Write-ScriptLog -Message "Starting Running $ScriptName version $ScriptVersion" -Level Information
+#----------------------------Script stuff goes below here!----------------------------------
 
-#Detection registry value
+
+#----------------------------Script stuff goes above here!----------------------------------
+#Detection default; $ScriptName with data: $ScriotVersion under HKLM:\Software\$CompanyName
 Set-DetectionKey
 }
 

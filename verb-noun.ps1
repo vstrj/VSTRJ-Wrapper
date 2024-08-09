@@ -13,7 +13,7 @@
     Sets the company name that will be used both as folder for the log and the registry key for detection
 .PARAMETER LogFolder
     Sets the folder will be created. By default a sub folder in C:\Program Data\ with the company name
-.PARAMETER LogFolder
+.PARAMETER Remove
     Switch parameter to run the script in Remove mode
 .INPUTS
   <Inputs if any, otherwise state None>

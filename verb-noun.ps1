@@ -26,10 +26,10 @@
   Purpose/Change: Initial script development
   
 .EXAMPLE
-  powershell.exe -ExecutionPolicy Bypass -file Set-StandardVictor.ps1 
-  %windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file Invoke-ChangeDefaultLanguage.ps1
+  powershell.exe -ExecutionPolicy Bypass -file verb-noun.ps1
+  %windir%\SysNative\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -file verb-noun.ps1
 
-  Set-StandardVictor.ps1 -Remove
+  verb-noun.ps1 -Remove
 #>
 
 [CmdletBinding()]
@@ -65,7 +65,7 @@ function Write-ScriptLog {
   .SYNOPSIS
       Writes a log for the script.
   .DESCRIPTION
-      Creates a logfile under the specified path with the default name SCRIPTLOG.LOG. 
+      Creates a logfile under the specified path with the default name $ScriptName. 
       If the directory does not exist, it creates it. 
       Information level can be Information, Warning, or ERROR.
   .PARAMETER Message
@@ -143,7 +143,7 @@ function Set-RegKey {
         Creates a Registry Key under the specified path with a Registry Value and data. 
         If the Registry Key does not exist, it creates it. If the Remove switch is used,
         it removes the specified Registry Value but not the key.
-        Default detection registry value, $ScriptName with data: $ScriotVersion under HKLM:\Software\$CompanyName
+        Default detection registry value, $ScriptName with data: $ScriptVersion under HKLM:\Software\$CompanyName
         
     .PARAMETER RegKey
         The registry key that should be created or modified.
